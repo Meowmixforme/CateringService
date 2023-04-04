@@ -1,0 +1,55 @@
+﻿@model IEnumerable<ThAmCo.Events.Data.GuestBooking>
+
+@{
+    ViewData["Title"] = "Event Booking";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Event)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Guest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attended)
+            </th>
+            <th></th>
+        </tr>
+
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Guest.EmailAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attended)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id= item.GuestId, id2 = item.EventId }) |
+                    @Html.ActionLink("Details", "Details", new { id= item.GuestId, id2 = item.EventId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id= item.GuestId, id2 = item.EventId })
+            </td>
+        </tr>
+}
+    </tbody>
+    <br> 
+    Number Of Guests: @Model.ToList().Count()</br>
+
+    Guests that have attended: @Model.Where(a => a.Attended).ToList().Count()
+    
+
+
+</table>

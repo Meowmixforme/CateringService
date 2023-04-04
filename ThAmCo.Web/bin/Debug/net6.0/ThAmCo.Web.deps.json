@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "ThAmCo.Web/1.0.0": {
+        "runtime": {
+          "ThAmCo.Web.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ThAmCo.Web/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

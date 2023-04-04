@@ -1,0 +1,63 @@
+﻿@model ThAmCo.Events.Data.Event
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Event</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Duration" class="control-label"></label>
+                <input asp-for="Duration" class="form-control" />
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventTypeId" class="control-label"></label>
+                <input asp-for="EventTypeId" class="form-control" />
+                <span asp-validation-for="EventTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VenueReservationReference" class="control-label"></label>
+                <input asp-for="VenueReservationReference" class="form-control" />
+                <span asp-validation-for="VenueReservationReference" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Cancelled" /> @Html.DisplayNameFor(model => model.Cancelled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CateringMenu" class="control-label"></label>
+                <input asp-for="CateringMenu" class="form-control" />
+                <span asp-validation-for="CateringMenu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
