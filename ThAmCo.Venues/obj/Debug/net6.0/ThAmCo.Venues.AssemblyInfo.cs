@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ThAmCo.Venues")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a6619cb440cb9a6addb31984623e86f9972031e")]
 [assembly: System.Reflection.AssemblyProductAttribute("ThAmCo.Venues")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ThAmCo.Venues")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

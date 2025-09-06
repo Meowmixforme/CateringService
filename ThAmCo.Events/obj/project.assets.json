@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {
+    "net8.0": {
       "Humanizer.Core/2.8.26": {
         "type": "package",
         "compile": {
@@ -2149,7 +2149,7 @@
           "lib/netstandard2.0/_._": {}
         },
         "build": {
-          "buildTransitive/net6.0/SQLitePCLRaw.lib.e_sqlite3.targets": {}
+          "buildTransitive/net7.0/SQLitePCLRaw.lib.e_sqlite3.targets": {}
         },
         "runtimeTargets": {
           "runtimes/alpine-arm/native/libe_sqlite3.so": {
@@ -2164,7 +2164,7 @@
             "assetType": "native",
             "rid": "alpine-x64"
           },
-          "runtimes/browser-wasm/nativeassets/net6.0/e_sqlite3.a": {
+          "runtimes/browser-wasm/nativeassets/net7.0/e_sqlite3.a": {
             "assetType": "native",
             "rid": "browser-wasm"
           },
@@ -10486,7 +10486,7 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net6.0": [
+    "net8.0": [
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 6.0.10",
       "Microsoft.EntityFrameworkCore >= 6.0.12",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.12",
@@ -10497,31 +10497,36 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\v8255\\.nuget\\packages\\": {}
+    "C:\\Users\\Kibbl\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\v8255\\source\\repos\\ThAmCo\\ThAmCo.Events\\ThAmCo.Events.csproj",
+      "projectUniqueName": "C:\\Users\\Kibbl\\source\\repos\\Meowmixforme\\CateringService\\ThAmCo.Events\\ThAmCo.Events.csproj",
       "projectName": "ThAmCo.Events",
-      "projectPath": "C:\\Users\\v8255\\source\\repos\\ThAmCo\\ThAmCo.Events\\ThAmCo.Events.csproj",
-      "packagesPath": "C:\\Users\\v8255\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\v8255\\source\\repos\\ThAmCo\\ThAmCo.Events\\obj\\",
+      "projectPath": "C:\\Users\\Kibbl\\source\\repos\\Meowmixforme\\CateringService\\ThAmCo.Events\\ThAmCo.Events.csproj",
+      "packagesPath": "C:\\Users\\Kibbl\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Kibbl\\source\\repos\\Meowmixforme\\CateringService\\ThAmCo.Events\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\v8255\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Kibbl\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net6.0"
+        "net8.0"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "projectReferences": {}
         }
       },
@@ -10529,11 +10534,17 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
-      "net6.0": {
-        "targetAlias": "net6.0",
+      "net8.0": {
+        "targetAlias": "net8.0",
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
             "target": "Package",
@@ -10587,7 +10598,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
