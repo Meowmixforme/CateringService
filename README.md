@@ -69,3 +69,5 @@ This project demonstrates:
 
 This project is for educational purposes.
 
+
+needs try/catch in a debug for pro level error checking
