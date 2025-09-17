@@ -30,19 +30,32 @@ namespace ThAmCo.Catering.Controllers
         {
             var foodBookings = await _context.FoodBookings
                 .Include(foo => foo.Menu)
-                    .ThenInclude(menu => menu.FoodItems) // Properly include nested navigation property
-                .Select(foo => new FoodBookingDTO
-                {
-                    FoodBookingId = foo.FoodBookingId,
-                    ClientReferenceId = foo.ClientReferenceId,
-                    NumberOfGuests = foo.NumberOfGuests,
-                    MenuId = foo.MenuId,
-                    Menu = foo.Menu // Assuming Menu is mapped as part of DTO
-                })
+                    .ThenInclude(menu => menu.FoodItems)
+                        .ThenInclude(mf => mf.FoodItem)
                 .ToListAsync();
 
-            // foodBookings will never be null; ToListAsync returns an empty list if no results.
-            return Ok(foodBookings);
+            var dtos = foodBookings.Select(foo => new FoodBookingDTO
+            {
+                FoodBookingId = foo.FoodBookingId,
+                ClientReferenceId = foo.ClientReferenceId,
+                NumberOfGuests = foo.NumberOfGuests,
+                MenuId = foo.MenuId,
+                Menu = new MenuDTO
+                {
+                    MenuId = foo.Menu.MenuId,
+                    MenuName = foo.Menu.MenuName,
+                    FoodItems = foo.Menu.FoodItems
+                        .Select(mf => new FoodItemDTO
+                        {
+                            FoodItemId = mf.FoodItem.FoodItemId,
+                            Description = mf.FoodItem.Description,
+                            UnitPrice = mf.FoodItem.UnitPrice
+                        })
+                        .ToList()
+                }
+            }).ToList();
+
+            return Ok(dtos);
         }
 
         // GET: api/FoodBookings/5
@@ -55,6 +68,7 @@ namespace ThAmCo.Catering.Controllers
             var foodBooking = await _context.FoodBookings
                 .Include(foo => foo.Menu)
                     .ThenInclude(menu => menu.FoodItems)
+                        .ThenInclude(mf => mf.FoodItem)
                 .FirstOrDefaultAsync(foo => foo.FoodBookingId == id);
 
             if (foodBooking == null)
@@ -62,13 +76,29 @@ namespace ThAmCo.Catering.Controllers
                 return NotFound();
             }
 
+            var menuEntity = foodBooking.Menu;
+
+            var menuDto = new MenuDTO
+            {
+                MenuId = menuEntity.MenuId,
+                MenuName = menuEntity.MenuName,
+                FoodItems = menuEntity.FoodItems
+                    .Select(mf => new FoodItemDTO
+                    {
+                        FoodItemId = mf.FoodItem.FoodItemId,
+                        Description = mf.FoodItem.Description,
+                        UnitPrice = mf.FoodItem.UnitPrice
+                    })
+                    .ToList()
+            };
+
             var dto = new FoodBookingDTO
             {
                 FoodBookingId = foodBooking.FoodBookingId,
                 ClientReferenceId = foodBooking.ClientReferenceId,
                 NumberOfGuests = foodBooking.NumberOfGuests,
                 MenuId = foodBooking.MenuId,
-                Menu = foodBooking.Menu
+                Menu = menuDto
             };
 
             return Ok(dto);
@@ -138,16 +168,34 @@ namespace ThAmCo.Catering.Controllers
             _context.FoodBookings.Add(foodBooking);
             await _context.SaveChangesAsync();
 
-            // Prepare DTO for response
+            // Fetch the menu with its food items for the DTO
+            var menuEntity = await _context.Menus
+                .Include(m => m.FoodItems)
+                .ThenInclude(mf => mf.FoodItem)
+                .FirstOrDefaultAsync(m => m.MenuId == foodBooking.MenuId);
+
+            // Map to DTOs
+            var menuDto = new MenuDTO
+            {
+                MenuId = menuEntity.MenuId,
+                MenuName = menuEntity.MenuName,
+                FoodItems = menuEntity.FoodItems
+                    .Select(mf => new FoodItemDTO
+                    {
+                        FoodItemId = mf.FoodItem.FoodItemId,
+                        Description = mf.FoodItem.Description,
+                        UnitPrice = mf.FoodItem.UnitPrice
+                    })
+                    .ToList()
+            };
+
             var dto = new FoodBookingDTO
             {
                 FoodBookingId = foodBooking.FoodBookingId,
                 ClientReferenceId = foodBooking.ClientReferenceId,
                 NumberOfGuests = foodBooking.NumberOfGuests,
                 MenuId = foodBooking.MenuId,
-                Menu = await _context.Menus
-                    .Include(m => m.FoodItems)
-                    .FirstOrDefaultAsync(m => m.MenuId == foodBooking.MenuId)
+                Menu = menuDto
             };
 
             // Return the created booking using the standard REST pattern

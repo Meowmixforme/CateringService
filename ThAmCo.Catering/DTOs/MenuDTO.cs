@@ -6,9 +6,7 @@ namespace ThAmCo.Catering.DTOs
     public class MenuDTO
     {
         public int MenuId { get; set; }
-
         public string MenuName { get; set; } = null!;
-
-        public ICollection<MenuFoodItem> FoodItems { get; set; }
+        public ICollection<FoodItemDTO> FoodItems { get; set; }
     }
 }

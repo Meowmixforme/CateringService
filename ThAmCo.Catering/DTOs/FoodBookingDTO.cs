@@ -12,6 +12,6 @@ namespace ThAmCo.Catering.DTOs
 
         public int MenuId { get; set; }
 
-        public Menu Menu { get; set; }
+        public MenuDTO Menu { get; set; }
     }
 }
