@@ -24,7 +24,7 @@ A catering service management web application developed as part of a Year 2 univ
 
 ### Prerequisites
 
-- [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - (Optional) Visual Studio 2022 or later
 
 ### Running the Backend API
