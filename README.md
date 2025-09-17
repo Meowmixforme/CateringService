@@ -14,7 +14,7 @@ A catering service management web application developed as part of a Year 2 univ
 
 ## Technologies Used
 
-- ASP.NET Core 6
+- ASP.NET Core 8
 - Entity Framework Core (Sqlite)
 - Razor Pages
 - Swagger (Swashbuckle)
@@ -69,3 +69,5 @@ This project demonstrates:
 
 This project is for educational purposes.
 
+
+needs try/catch in a debug for pro level error checking
