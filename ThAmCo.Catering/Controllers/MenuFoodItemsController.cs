@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Catering.Data;
@@ -26,135 +24,88 @@ namespace ThAmCo.Catering.Controllers
         public async Task<ActionResult<IEnumerable<MenuFoodItemDTO>>> GetMenuFoodItems()
         {
             var menuFoodItems = await _context.MenuFoodItems
-                .Include(m => m.Menu).Include(f => f.FoodItem)
                 .Select(mf => new MenuFoodItemDTO
-                //Project into DTO shape
                 {
                     MenuId = mf.MenuId,
-                    
-                    FoodItemId = mf.FoodItemId,
-                    
+                    FoodItemId = mf.FoodItemId
                 })
                 .ToListAsync();
-            if (menuFoodItems == null)
-            {
-                return NotFound();
-            }
 
             return Ok(menuFoodItems);
         }
 
-
-
-
-
-        // GET: api/MenusFoodItems/5
-        //[HttpGet("{MenuId}/FoodItemId/{FoodItemId}")]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MenuFoodItemDTO>> MenuFoodItem(int id)
+        // GET: api/MenuFoodItems/5/7
+        [HttpGet("{menuId}/{foodItemId}")]
+        public async Task<ActionResult<MenuFoodItemDTO>> GetMenuFoodItem(int menuId, int foodItemId)
         {
-            var menuFoodItem = await _context
-            .MenuFoodItems
-            .Include(m => m.Menu).Include(f => f.FoodItem)
-            .FirstOrDefaultAsync(m => m.MenuId == id);
+            var menuFoodItem = await _context.MenuFoodItems
+                .FirstOrDefaultAsync(m => m.MenuId == menuId && m.FoodItemId == foodItemId);
 
             if (menuFoodItem == null)
-            {
                 return NotFound();
-            }
 
-            //Project them into the DTO shape
-            ThAmCo.Catering.DTOs.MenuFoodItemDTO dto = new DTOs.MenuFoodItemDTO();
-            dto.MenuId = id;
-            
-            dto.FoodItemId = menuFoodItem.FoodItemId;
-
+            var dto = new MenuFoodItemDTO
+            {
+                MenuId = menuFoodItem.MenuId,
+                FoodItemId = menuFoodItem.FoodItemId
+            };
             return Ok(dto);
         }
 
-
-
-
-        // PUT: api/MenuFoodItems/5
-        //[HttpPut("{MenuId}/FoodItemId/{FoodItemId}")]
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<ActionResult<PutMenuFoodItemDTO>> PutMenuFoodItem(int id, PutMenuFoodItemDTO menuFoodItemDTO)
+        // PUT: api/MenuFoodItems/5/7
+        [HttpPut("{menuId}/{foodItemId}")]
+        public async Task<IActionResult> PutMenuFoodItem(int menuId, int foodItemId, PutMenuFoodItemDTO dto)
         {
+            if (menuId != dto.MenuId || foodItemId != dto.FoodItemId)
+                return BadRequest("ID mismatch.");
 
-            if (id != menuFoodItemDTO.MenuId)
-            {
-                return BadRequest("menuFoodItem Does Not Exist!");
-            }
+            var mfi = await _context.MenuFoodItems.FindAsync(menuId, foodItemId);
+            if (mfi == null)
+                return NotFound();
 
-            var menuFoodItem = await _context
-            .MenuFoodItems
-            .FirstOrDefaultAsync(m => m.MenuId == id);
-            //Project from DTO into entity for server
-            {
-                menuFoodItemDTO.MenuId = menuFoodItem.MenuId;
-                menuFoodItemDTO.FoodItemId = menuFoodItem.FoodItemId!;
-            };
+            // If there are updatable fields, update them here
 
-            _context.Entry(menuFoodItem).State = EntityState.Modified;
+            _context.Entry(mfi).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
         }
 
-
-        // POST: api/MenuFoodItems/5/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/MenuFoodItems
         [HttpPost]
-        public async Task<ActionResult<PutMenuFoodItemDTO>> PostMenuFoodItem(int menuId, int foodItemId)
+        public async Task<ActionResult<MenuFoodItemDTO>> PostMenuFoodItem(MenuFoodItemDTO dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            // 2 variables for menu & fooditem  
-            var menu = await _context.Menus.FindAsync(menuId);
-            var foodItem = await _context.FoodItems.FindAsync(foodItemId);
+            var menu = await _context.Menus.FindAsync(dto.MenuId);
+            var foodItem = await _context.FoodItems.FindAsync(dto.FoodItemId);
             if (menu == null || foodItem == null)
                 return NotFound();
-            //Project from DTO into entity 
-            MenuFoodItem mfi = new MenuFoodItem()
+
+            var mfi = new MenuFoodItem
             {
-                FoodItemId = foodItemId,
-                MenuId = menuId,
-                FoodItem = foodItem,
-                Menu = menu
+                MenuId = dto.MenuId,
+                FoodItemId = dto.FoodItemId,
+                Menu = menu,
+                FoodItem = foodItem
             };
 
-            await _context.MenuFoodItems.AddAsync(mfi);
+            _context.MenuFoodItems.Add(mfi);
             await _context.SaveChangesAsync();
-            // Return as DTO
-            return Ok(new PutMenuFoodItemDTO() { FoodItemId = mfi.FoodItemId, MenuId = mfi.MenuId });
+
+            return CreatedAtAction(nameof(GetMenuFoodItem), new { menuId = mfi.MenuId, foodItemId = mfi.FoodItemId }, dto);
         }
 
-
-
-
-
-        // DELETE: api/MenuFoodItems/5/5
+        // DELETE: api/MenuFoodItems/5/7
         [HttpDelete("{menuId}/{foodItemId}")]
-        public async Task<ActionResult<MenuFoodItemDTO>> DeleteMenuFoodItem(int menuId, int foodItemId)
+        public async Task<IActionResult> DeleteMenuFoodItem(int menuId, int foodItemId)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var  mfi = await _context.MenuFoodItems.FindAsync(menuId, foodItemId);
+            var mfi = await _context.MenuFoodItems.FindAsync(menuId, foodItemId);
             if (mfi == null)
                 return NotFound();
 
             _context.MenuFoodItems.Remove(mfi);
             await _context.SaveChangesAsync();
 
-            return Ok();
-
-        }
-
-        private bool MenuFoodItemExists(int id)
-        {
-            return _context.MenuFoodItems.Any(e => e.FoodItemId == id);
+            return NoContent();
         }
     }
 }
