@@ -70,4 +70,4 @@ This project demonstrates:
 This project is for educational purposes.
 
 
-needs try/catch in a debug for pro level error checking
+- Note: add logging in future. Look into Serilog, NLog, or built-in Microsoft.Extensions.Logging
