@@ -1,21 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace ThAmCo.Catering.Data
 {
     public class FoodItem
     {
+        public FoodItem() { }
 
-        public FoodItem()
-        {
-
-        }
-        public FoodItem(int foodItemId,
-            string description,
-            float unitPrice)
+        public FoodItem(int foodItemId, string description, float unitPrice)
         {
             FoodItemId = foodItemId;
             Description = description;
             UnitPrice = unitPrice;
+            Menus = new List<MenuFoodItem>();
         }
 
         public int FoodItemId { get; set; }
@@ -26,7 +23,6 @@ namespace ThAmCo.Catering.Data
 
         public float UnitPrice { get; set; }
 
-        public ICollection<MenuFoodItem> Menus { get; set; }
-
+        public ICollection<MenuFoodItem> Menus { get; set; } = new List<MenuFoodItem>();
     }
 }

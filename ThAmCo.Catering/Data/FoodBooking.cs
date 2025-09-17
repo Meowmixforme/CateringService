@@ -2,18 +2,9 @@
 {
     public class FoodBooking
     {
+        public FoodBooking() { }
 
-
-        public FoodBooking()
-        {
-
-        }
-
-
-        public FoodBooking(int foodBookingId,
-            int clientReferenceId,
-            int numberOfGuests,
-            int menuId)
+        public FoodBooking(int foodBookingId, int clientReferenceId, int numberOfGuests, int menuId)
         {
             FoodBookingId = foodBookingId;
             ClientReferenceId = clientReferenceId;
@@ -22,12 +13,9 @@
         }
 
         public int FoodBookingId { get; set; }
-
         public int ClientReferenceId { get; set; }
-
         public int NumberOfGuests { get; set; }
-
-        public int MenuId {get; set;}
+        public int MenuId { get; set; }
 
         public Menu Menu { get; set; }
     }
