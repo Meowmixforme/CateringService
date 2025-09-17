@@ -11,8 +11,5 @@ namespace ThAmCo.Catering.DTOs
 
         public float UnitPrice { get; set; }
 
-
-
-
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ThAmCo.Catering.Data;
+﻿using System.Collections.Generic;
 
 namespace ThAmCo.Catering.DTOs
 {
@@ -7,6 +6,6 @@ namespace ThAmCo.Catering.DTOs
     {
         public int MenuId { get; set; }
         public string MenuName { get; set; } = null!;
-        public ICollection<FoodItemDTO> FoodItems { get; set; }
+        public ICollection<FoodItemDTO> FoodItems { get; set; } = new List<FoodItemDTO>();
     }
 }

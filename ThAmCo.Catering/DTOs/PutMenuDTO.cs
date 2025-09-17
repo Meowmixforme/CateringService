@@ -7,8 +7,8 @@ namespace ThAmCo.Catering.DTOs
     {
         public int MenuId { get; set; }
 
+        [Required]
+        [StringLength(100)] // Example max length
         public string MenuName { get; set; } = null!;
-
-        
     }
 }
