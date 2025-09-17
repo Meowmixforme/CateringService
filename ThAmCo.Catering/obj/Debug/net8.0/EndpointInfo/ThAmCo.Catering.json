@@ -349,24 +349,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/FoodItemDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FoodItemDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FoodItemDTO"
-                }
-              }
-            }
+            "description": "Success"
           }
         }
       },
@@ -387,24 +370,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDTO"
-                }
-              }
-            }
+            "description": "Success"
           }
         }
       }
@@ -450,41 +416,42 @@
         "tags": [
           "MenuFoodItems"
         ],
-        "parameters": [
-          {
-            "name": "menuId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "foodItemId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuFoodItemDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuFoodItemDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MenuFoodItemDTO"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/PutMenuFoodItemDTO"
+                  "$ref": "#/components/schemas/MenuFoodItemDTO"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PutMenuFoodItemDTO"
+                  "$ref": "#/components/schemas/MenuFoodItemDTO"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PutMenuFoodItemDTO"
+                  "$ref": "#/components/schemas/MenuFoodItemDTO"
                 }
               }
             }
@@ -492,14 +459,23 @@
         }
       }
     },
-    "/api/MenuFoodItems/{id}": {
+    "/api/MenuFoodItems/{menuId}/{foodItemId}": {
       "get": {
         "tags": [
           "MenuFoodItems"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "menuId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "foodItemId",
             "in": "path",
             "required": true,
             "schema": {
@@ -537,7 +513,16 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "menuId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "foodItemId",
             "in": "path",
             "required": true,
             "schema": {
@@ -567,29 +552,10 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/PutMenuFoodItemDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PutMenuFoodItemDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PutMenuFoodItemDTO"
-                }
-              }
-            }
+            "description": "Success"
           }
         }
-      }
-    },
-    "/api/MenuFoodItems/{menuId}/{foodItemId}": {
+      },
       "delete": {
         "tags": [
           "MenuFoodItems"
@@ -616,24 +582,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuFoodItemDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuFoodItemDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuFoodItemDTO"
-                }
-              }
-            }
+            "description": "Success"
           }
         }
       }
@@ -704,17 +653,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostMenuDTO"
+                  "$ref": "#/components/schemas/MenuDTO"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostMenuDTO"
+                  "$ref": "#/components/schemas/MenuDTO"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostMenuDTO"
+                  "$ref": "#/components/schemas/MenuDTO"
                 }
               }
             }
@@ -797,24 +746,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/PutMenuDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PutMenuDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PutMenuDTO"
-                }
-              }
-            }
+            "description": "Success"
           }
         }
       },
@@ -835,24 +767,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDTO"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDTO"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MenuDTO"
-                }
-              }
-            }
+            "description": "Success"
           }
         }
       }
@@ -863,10 +778,6 @@
       "CreateFoodBookingDTO": {
         "type": "object",
         "properties": {
-          "foodBookingId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "clientReferenceId": {
             "type": "integer",
             "format": "int32"
@@ -878,31 +789,6 @@
           "menuId": {
             "type": "integer",
             "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FoodBooking": {
-        "type": "object",
-        "properties": {
-          "foodBookingId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "clientReferenceId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "numberOfGuests": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "menuId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "menu": {
-            "$ref": "#/components/schemas/Menu"
           }
         },
         "additionalProperties": false
@@ -927,36 +813,7 @@
             "format": "int32"
           },
           "menu": {
-            "$ref": "#/components/schemas/Menu"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FoodItem": {
-        "required": [
-          "description"
-        ],
-        "type": "object",
-        "properties": {
-          "foodItemId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "description": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "unitPrice": {
-            "type": "number",
-            "format": "float"
-          },
-          "menus": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MenuFoodItem"
-            },
-            "nullable": true
+            "$ref": "#/components/schemas/MenuDTO"
           }
         },
         "additionalProperties": false
@@ -979,38 +836,6 @@
         },
         "additionalProperties": false
       },
-      "Menu": {
-        "required": [
-          "menuName"
-        ],
-        "type": "object",
-        "properties": {
-          "menuId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "menuName": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "foodItems": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MenuFoodItem"
-            },
-            "nullable": true
-          },
-          "foodBookings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FoodBooking"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "MenuDTO": {
         "type": "object",
         "properties": {
@@ -1025,29 +850,9 @@
           "foodItems": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/MenuFoodItem"
+              "$ref": "#/components/schemas/FoodItemDTO"
             },
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "MenuFoodItem": {
-        "type": "object",
-        "properties": {
-          "foodItemId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "foodItem": {
-            "$ref": "#/components/schemas/FoodItem"
-          },
-          "menuId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "menu": {
-            "$ref": "#/components/schemas/Menu"
           }
         },
         "additionalProperties": false
@@ -1059,12 +864,12 @@
             "type": "integer",
             "format": "int32"
           },
-          "menu": {
-            "$ref": "#/components/schemas/MenuDTO"
-          },
           "foodItemId": {
             "type": "integer",
             "format": "int32"
+          },
+          "menu": {
+            "$ref": "#/components/schemas/MenuDTO"
           },
           "foodItem": {
             "$ref": "#/components/schemas/FoodItemDTO"
@@ -1073,16 +878,23 @@
         "additionalProperties": false
       },
       "PostMenuDTO": {
+        "required": [
+          "menuName"
+        ],
         "type": "object",
         "properties": {
           "menuName": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
           }
         },
         "additionalProperties": false
       },
       "PutMenuDTO": {
+        "required": [
+          "menuName"
+        ],
         "type": "object",
         "properties": {
           "menuId": {
@@ -1090,8 +902,9 @@
             "format": "int32"
           },
           "menuName": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
           }
         },
         "additionalProperties": false

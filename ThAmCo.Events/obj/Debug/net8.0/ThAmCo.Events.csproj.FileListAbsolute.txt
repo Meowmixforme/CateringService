@@ -300,3 +300,4 @@ C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Events\obj\Debug
 C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Events\obj\Debug\net8.0\ThAmCo.Events.pdb
 C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Events\obj\Debug\net8.0\ThAmCo.Events.genruntimeconfig.cache
 C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Events\obj\Debug\net8.0\ref\ThAmCo.Events.dll
+C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Events\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

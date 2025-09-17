@@ -194,22 +194,12 @@
         "IsRequired": true
       },
       {
-        "Name": "FoodItemDTO",
+        "Name": "foodItemDto",
         "Type": "ThAmCo.Catering.DTOs.FoodItemDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ThAmCo.Catering.DTOs.FoodItemDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ThAmCo.Catering.Controllers.FoodItemsController",
@@ -225,17 +215,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ThAmCo.Catering.DTOs.MenuDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ThAmCo.Catering.Controllers.MenuFoodItemsController",
@@ -266,19 +246,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "menuId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "foodItemId",
-        "Type": "System.Int32",
-        "IsRequired": false
+        "Name": "dto",
+        "Type": "ThAmCo.Catering.DTOs.MenuFoodItemDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "ThAmCo.Catering.DTOs.PutMenuFoodItemDTO",
+        "Type": "ThAmCo.Catering.DTOs.MenuFoodItemDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -290,14 +265,19 @@
   },
   {
     "ContainingType": "ThAmCo.Catering.Controllers.MenuFoodItemsController",
-    "Method": "MenuFoodItem",
-    "RelativePath": "api/MenuFoodItems/{id}",
+    "Method": "GetMenuFoodItem",
+    "RelativePath": "api/MenuFoodItems/{menuId}/{foodItemId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "menuId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "foodItemId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -317,33 +297,28 @@
   {
     "ContainingType": "ThAmCo.Catering.Controllers.MenuFoodItemsController",
     "Method": "PutMenuFoodItem",
-    "RelativePath": "api/MenuFoodItems/{id}",
+    "RelativePath": "api/MenuFoodItems/{menuId}/{foodItemId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "menuId",
         "Type": "System.Int32",
         "IsRequired": true
       },
       {
-        "Name": "menuFoodItemDTO",
+        "Name": "foodItemId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
         "Type": "ThAmCo.Catering.DTOs.PutMenuFoodItemDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ThAmCo.Catering.DTOs.PutMenuFoodItemDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ThAmCo.Catering.Controllers.MenuFoodItemsController",
@@ -364,17 +339,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ThAmCo.Catering.DTOs.MenuFoodItemDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ThAmCo.Catering.Controllers.MenusController",
@@ -412,7 +377,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "ThAmCo.Catering.DTOs.PostMenuDTO",
+        "Type": "ThAmCo.Catering.DTOs.MenuDTO",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -450,7 +415,7 @@
   },
   {
     "ContainingType": "ThAmCo.Catering.Controllers.MenusController",
-    "Method": "PutMenuItem",
+    "Method": "PutMenu",
     "RelativePath": "api/Menus/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -462,22 +427,12 @@
         "IsRequired": true
       },
       {
-        "Name": "createMenuItem",
+        "Name": "dto",
         "Type": "ThAmCo.Catering.DTOs.PutMenuDTO",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ThAmCo.Catering.DTOs.PutMenuDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ThAmCo.Catering.Controllers.MenusController",
@@ -493,16 +448,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ThAmCo.Catering.DTOs.MenuDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   }
 ]

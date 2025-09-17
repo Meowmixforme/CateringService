@@ -232,3 +232,4 @@ C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Venues\obj\Debug
 C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Venues\obj\Debug\net6.0\ThAmCo.Venues.pdb
 C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Venues\obj\Debug\net6.0\ThAmCo.Venues.genruntimeconfig.cache
 C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Venues\obj\Debug\net6.0\ref\ThAmCo.Venues.dll
+C:\Users\Kibbl\source\repos\Meowmixforme\CateringService\ThAmCo.Venues\obj\Debug\net6.0\staticwebassets.upToDateCheck.txt
