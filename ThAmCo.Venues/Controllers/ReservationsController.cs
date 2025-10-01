@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Venues.Data;
-using ThAmCo.Venues.Models;
+using ThAmCo.Venues.DTOs;
 
 namespace ThAmCo.Venues.Controllers
 {
@@ -22,64 +17,84 @@ namespace ThAmCo.Venues.Controllers
         }
 
         [HttpGet("{reference}")]
-        public async Task<IActionResult> GetReservation([FromRoute] string reference)
+        public async Task<ActionResult<ReservationDTO>> GetReservation([FromRoute] string reference)
         {
             var reservation = await _context.Reservations.FindAsync(reference);
             if (reservation == null)
-            {
                 return NotFound();
-            }
-            return Ok(ReservationGetDto.FromModel(reservation));
+
+            // Map Reservation to ReservationDTO
+            var dto = new ReservationDTO
+            {
+                Reference = reservation.Reference,
+                EventDate = reservation.EventDate,
+                VenueCode = reservation.VenueCode,
+                WhenMade = reservation.WhenMade,
+                StaffId = reservation.StaffId
+            };
+            return Ok(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult>
-        CreateReservation([FromBody] ReservationPostDto reservation)
+        public async Task<ActionResult<ReservationDTO>> CreateReservation([FromBody] ReservationPostDTO reservationDto)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest(ModelState);
-            }
 
             var availability = await _context.Availabilities
-                                             .Include(a => a.Reservation)
-                                             .FirstOrDefaultAsync(
-                                                a => a.Date == reservation.EventDate
-                                                     && a.VenueCode == reservation.VenueCode);
+                .Include(a => a.Reservation)
+                .FirstOrDefaultAsync(
+                    a => a.Date == reservationDto.EventDate
+                        && a.VenueCode == reservationDto.VenueCode);
 
             if (availability == null || availability.Reservation != null)
-            {
                 return BadRequest("Venue is not available on the requested date.");
-            }
 
-            availability.Reservation = new Reservation
+            var reservation = new Reservation
             {
                 Reference = $"{availability.VenueCode}{availability.Date:yyyyMMdd}",
                 EventDate = availability.Date,
                 VenueCode = availability.VenueCode,
                 WhenMade = DateTime.Now,
-                StaffId = reservation.StaffId
+                StaffId = reservationDto.StaffId
             };
+
+            availability.Reservation = reservation;
             await _context.SaveChangesAsync();
 
+            var dto = new ReservationDTO
+            {
+                Reference = reservation.Reference,
+                EventDate = reservation.EventDate,
+                VenueCode = reservation.VenueCode,
+                WhenMade = reservation.WhenMade,
+                StaffId = reservation.StaffId
+            };
+
             return CreatedAtAction("GetReservation",
-                                   new { reference = availability.Reservation.Reference },
-                                   ReservationGetDto.FromModel(availability.Reservation));
+                new { reference = reservation.Reference },
+                dto);
         }
 
         [HttpDelete("{reference}")]
-        public async Task<IActionResult> DeleteReservation([FromRoute] string reference)
+        public async Task<ActionResult<ReservationDTO>> DeleteReservation([FromRoute] string reference)
         {
             var reservation = await _context.Reservations.FindAsync(reference);
             if (reservation == null)
-            {
                 return NotFound();
-            }
 
             _context.Reservations.Remove(reservation);
             await _context.SaveChangesAsync();
 
-            return Ok(ReservationGetDto.FromModel(reservation));
+            var dto = new ReservationDTO
+            {
+                Reference = reservation.Reference,
+                EventDate = reservation.EventDate,
+                VenueCode = reservation.VenueCode,
+                WhenMade = reservation.WhenMade,
+                StaffId = reservation.StaffId
+            };
+            return Ok(dto);
         }
     }
 }

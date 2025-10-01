@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ThAmCo.Venues.Models
+namespace ThAmCo.Venues.DTOs
 {
-    public class ReservationPostDto
+    public class ReservationPostDTO
     {
-        [Required, DataType(DataType.Date)]
+        [Required]
         public DateTime EventDate { get; set; }
 
         [Required, MinLength(5), MaxLength(5)]

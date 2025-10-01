@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Venues.Data;
+using ThAmCo.Venues.DTOs;
 
 namespace ThAmCo.Venues.Controllers
 {
@@ -17,14 +18,15 @@ namespace ThAmCo.Venues.Controllers
 
         // GET: api/EventTypes
         [HttpGet]
-        public async Task<IActionResult> GetEventTypes()
+        public async Task<ActionResult<IEnumerable<EventTypeDTO>>> GetEventTypes()
         {
             var dto = await _context.EventTypes
-                                    .Select(e => new
-                                    {
-                                        e.Id,
-                                        e.Title
-                                    }).ToListAsync();
+                .Select(e => new EventTypeDTO
+                {
+                    Id = e.Id,
+                    Title = e.Title
+                })
+                .ToListAsync();
             return Ok(dto);
         }
     }
