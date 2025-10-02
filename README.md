@@ -61,10 +61,6 @@ This project demonstrates:
 - Applying separation of concerns and dependency injection.
 - Integrating Swagger for API documentation.
 
-## Author
-
-- James Fothergill
-
 ## Licence
 
 This project is for educational purposes.
