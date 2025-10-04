@@ -70,3 +70,4 @@ This project is for educational purposes.
 
 
 - Note: add logging in future. Look into Serilog, NLog, or built-in Microsoft.Extensions.Logging
+- Use authentication and authorisation on a single fronend.
