@@ -1,3 +1,6 @@
+This was originally from my second year university module Web Apps and Services. The code has been updated and expanded to make use of additional features.
+
+
 # CateringService
 
 A catering service management web application developed as part of a Year 2 university module, using ASP.NET Core. The solution is split into two main projects: a backend Web API (`ThAmCo.Catering`) and a frontend Razor Pages web app (`Catering.Web`). The application demonstrates modern .NET development practices, including RESTful APIs, Entity Framework Core, and clean separation of concerns.
@@ -60,10 +63,6 @@ This project demonstrates:
 - Using Entity Framework Core for ORM and data seeding.
 - Applying separation of concerns and dependency injection.
 - Integrating Swagger for API documentation.
-
-## Author
-
-- James Fothergill
 
 ## Licence
 
