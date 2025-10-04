@@ -9,7 +9,7 @@ namespace ThAmCo.Events.DTOs
         public string EventTypeId { get; set; }
         public bool Cancelled { get; set; }
         public int FoodBookingId { get; set; }
-        public string VenueReservationReference { get; set; }  // <-- Add this line
+        public string VenueReservationReference { get; set; } 
         // Optionally:
         // public List<GuestBookingDTO> Bookings { get; set; }
         // public List<StaffingDTO> StaffBookings { get; set; }
