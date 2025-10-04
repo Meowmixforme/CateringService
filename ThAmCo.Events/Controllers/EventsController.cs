@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.DTOs;
 
 namespace ThAmCo.Events.Controllers
 {
-    public class EventsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class EventsController : ControllerBase
     {
         private readonly EventsContext _context;
 
@@ -17,146 +15,94 @@ namespace ThAmCo.Events.Controllers
         {
             _context = context;
         }
-        //Get all events
-        // GET: Events
-        public async Task<IActionResult> Index()
-        {
-              return View(await _context.Events
-                  .Include(e => e.Bookings).Include(e => e.StaffBooking).ThenInclude(e => e.Staff)
-                  .ToListAsync());
-        }
-        //Get a specific event by id
-        // GET: Events/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Events == null)
-            {
-                return NotFound();
-            }
 
-            var @event = await _context.Events
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-
-            return View(@event);
-        }
-        
-        // GET: Events/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<EventDTO>>> GetEvents()
         {
-            return View();
-        }
-
-        // POST: Events/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Duration,Date,EventTypeId,VenueReservationReference,Cancelled,FoodBookingId")] Event @event)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(@event);
-        }
-
-        // GET: Events/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Events == null)
-            {
-                return NotFound();
-            }
-
-            var @event = await _context.Events.FindAsync(id);
-            if (@event == null)
-            {
-                return NotFound();
-            }
-            return View(@event);
-        }
-        //Edit a specific event by id
-        // POST: Events/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Duration,Date,EventTypeId,VenueReservationReference,Cancelled,FoodBookingId")] Event @event)
-        {
-            if (id != @event.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+            return await _context.Events
+                .Select(e => new EventDTO
                 {
-                    _context.Update(@event);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EventExists(@event.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(@event);
+                    Id = e.Id,
+                    Title = e.Title,
+                    Duration = e.Duration,
+                    Date = e.Date,
+                    EventTypeId = e.EventTypeId,
+                    Cancelled = e.Cancelled,
+                    FoodBookingId = e.CateringMenu,
+                    VenueReservationReference = e.VenueReservationReference
+                })
+                .ToListAsync();
         }
-        // Delete a specific event by id
-        // GET: Events/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EventDTO>> GetEvent(int id)
         {
-            if (id == null || _context.Events == null)
-            {
-                return NotFound();
-            }
+            var e = await _context.Events.FindAsync(id);
+            if (e == null) return NotFound();
 
-            var @event = await _context.Events
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (@event == null)
+            return new EventDTO
             {
-                return NotFound();
-            }
-
-            return View(@event);
+                Id = e.Id,
+                Title = e.Title,
+                Duration = e.Duration,
+                Date = e.Date,
+                EventTypeId = e.EventTypeId,
+                Cancelled = e.Cancelled,
+                FoodBookingId = e.CateringMenu,
+                VenueReservationReference = e.VenueReservationReference
+            };
         }
-        
-        // POST: Events/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+
+        [HttpPost]
+        public async Task<ActionResult<EventDTO>> CreateEvent(EventDTO dto)
         {
-            if (_context.Events == null)
+            var entity = new Event
             {
-                return Problem("Entity set 'EventsContext.Events'  is null.");
-            }
-            var @event = await _context.Events.FindAsync(id);
-            if (@event != null)
-            {
-                _context.Events.Remove(@event);
-            }
-            
+                Title = dto.Title,
+                Duration = dto.Duration,
+                Date = dto.Date,
+                EventTypeId = dto.EventTypeId,
+                CateringMenu = dto.FoodBookingId,
+                VenueReservationReference = dto.VenueReservationReference
+            };
+
+            _context.Events.Add(entity);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            dto.Id = entity.Id;
+            return CreatedAtAction(nameof(GetEvent), new { id = entity.Id }, dto);
         }
-        //Check to see if event already exists
-        private bool EventExists(int id)
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateEvent(int id, EventDTO dto)
         {
-          return _context.Events.Any(e => e.Id == id);
+            if (id != dto.Id) return BadRequest();
+
+            var entity = await _context.Events.FindAsync(id);
+            if (entity == null) return NotFound();
+
+            entity.Title = dto.Title;
+            entity.Duration = dto.Duration;
+            entity.Date = dto.Date;
+            entity.EventTypeId = dto.EventTypeId;
+            entity.CateringMenu = dto.FoodBookingId;
+            entity.VenueReservationReference = dto.VenueReservationReference;
+            entity.Cancelled = dto.Cancelled;
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            var entity = await _context.Events.FindAsync(id);
+            if (entity == null) return NotFound();
+
+            _context.Events.Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

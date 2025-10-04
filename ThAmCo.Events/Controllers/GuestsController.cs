@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.DTOs;
 
 namespace ThAmCo.Events.Controllers
 {
-    public class GuestsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class GuestsController : ControllerBase
     {
         private readonly EventsContext _context;
 
@@ -17,169 +15,87 @@ namespace ThAmCo.Events.Controllers
         {
             _context = context;
         }
-        //Get request to return all Guests
-        // GET: Guests
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Guests.ToListAsync());
-        }
-        //Get request for a specific user by id
-        // GET: Guests/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Guests == null)
-            {
-                return NotFound();
-            }
 
-            var guest = await _context.Guests
-                .Include(g => g.Bookings)
-                .ThenInclude(g => g.Event)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (guest == null)
-            {
-                return NotFound();
-            }
-
-            return View(guest);
-        }
-
-        // GET: Guests/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GuestDTO>>> GetGuests()
         {
-            return View();
-        }
-
-        // POST: Guests/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Forename,Surname,Payment,EmailAddress,Deleted")] Guest guest)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(guest);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(guest);
-        }
-        //Edit a specific user by id
-        // GET: Guests/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Guests == null)
-            {
-                return NotFound();
-            }
-
-            var guest = await _context.Guests.FindAsync(id);
-            if (guest == null)
-            {
-                return NotFound();
-            }
-            return View(guest);
-        }
-        // Post request to edit a specific user by id
-        // POST: Guests/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Forename,Surname,Payment,EmailAddress,Deleted")] Guest guest)
-        {
-            if (id != guest.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+            return await _context.Guests
+                .Select(g => new GuestDTO
                 {
-                    _context.Update(guest);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GuestExists(guest.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(guest);
+                    Id = g.Id,
+                    Forename = g.Forename,
+                    Surname = g.Surname,
+                    Payment = g.Payment,
+                    EmailAddress = g.EmailAddress,
+                    Deleted = g.Deleted
+                })
+                .ToListAsync();
         }
 
-        // GET: Guests/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GuestDTO>> GetGuest(int id)
         {
-            if (id == null || _context.Guests == null)
-            {
-                return NotFound();
-            }
+            var g = await _context.Guests.FindAsync(id);
+            if (g == null) return NotFound();
 
-            var guest = await _context.Guests
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (guest == null)
+            return new GuestDTO
             {
-                return NotFound();
-            }
-
-            return View(guest);
+                Id = g.Id,
+                Forename = g.Forename,
+                Surname = g.Surname,
+                Payment = g.Payment,
+                EmailAddress = g.EmailAddress,
+                Deleted = g.Deleted
+            };
         }
 
-        // POST: Guests/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost]
+        public async Task<ActionResult<GuestDTO>> CreateGuest(GuestDTO dto)
         {
-            if (_context.Guests == null)
+            var entity = new Guest
             {
-                return Problem("Entity set 'EventsContext.Guests'  is null.");
-            }
-            var guest = await _context.Guests.FindAsync(id);
-            if (guest != null)
-            {
-                _context.Guests.Remove(guest);
-            }
+                Forename = dto.Forename,
+                Surname = dto.Surname,
+                Payment = dto.Payment,
+                EmailAddress = dto.EmailAddress,
+                Deleted = dto.Deleted
+            };
+
+            _context.Guests.Add(entity);
+            await _context.SaveChangesAsync();
+
+            dto.Id = entity.Id;
+            return CreatedAtAction(nameof(GetGuest), new { id = entity.Id }, dto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateGuest(int id, GuestDTO dto)
+        {
+            if (id != dto.Id) return BadRequest();
+
+            var entity = await _context.Guests.FindAsync(id);
+            if (entity == null) return NotFound();
+
+            entity.Forename = dto.Forename;
+            entity.Surname = dto.Surname;
+            entity.Payment = dto.Payment;
+            entity.EmailAddress = dto.EmailAddress;
+            entity.Deleted = dto.Deleted;
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return NoContent();
         }
 
-        private bool GuestExists(int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGuest(int id)
         {
-            return _context.Guests.Any(e => e.Id == id);
-        }
+            var entity = await _context.Guests.FindAsync(id);
+            if (entity == null) return NotFound();
 
-
-        //Get: Guest/Delete/5
-        public async Task<IActionResult> PermaDelete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var guest = await _context.Guests
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (guest == null)
-            {
-                return NotFound();
-            }
-            guest.Forename = "Wiped";
-            guest.Surname = "Wiped";
-            guest.EmailAddress = "Wiped";
-
-            _context.Update(guest);
+            _context.Guests.Remove(entity);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
     }
 }

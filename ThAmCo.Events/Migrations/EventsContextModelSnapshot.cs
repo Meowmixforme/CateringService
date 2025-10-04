@@ -36,7 +36,8 @@ namespace ThAmCo.Events.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("EventTypeId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .IsFixedLength();
 
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");
@@ -171,12 +172,7 @@ namespace ThAmCo.Events.Migrations
                     b.Property<bool>("Attended")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EventDTOId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("GuestId", "EventId");
-
-                    b.HasIndex("EventDTOId");
 
                     b.HasIndex("EventId");
 
@@ -279,12 +275,7 @@ namespace ThAmCo.Events.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnOrder(1);
 
-                    b.Property<int?>("EventDTOId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("StaffId", "EventId");
-
-                    b.HasIndex("EventDTOId");
 
                     b.HasIndex("EventId");
 
@@ -331,7 +322,7 @@ namespace ThAmCo.Events.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<TimeSpan?>("Duration")
-                        .HasColumnType("bigint");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("EventTypeId")
                         .HasColumnType("TEXT");
@@ -352,10 +343,6 @@ namespace ThAmCo.Events.Migrations
 
             modelBuilder.Entity("ThAmCo.Events.Data.GuestBooking", b =>
                 {
-                    b.HasOne("ThAmCo.Events.DTOs.EventDTO", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("EventDTOId");
-
                     b.HasOne("ThAmCo.Events.Data.Event", "Event")
                         .WithMany("Bookings")
                         .HasForeignKey("EventId")
@@ -375,10 +362,6 @@ namespace ThAmCo.Events.Migrations
 
             modelBuilder.Entity("ThAmCo.Events.Data.Staffing", b =>
                 {
-                    b.HasOne("ThAmCo.Events.DTOs.EventDTO", null)
-                        .WithMany("Staff")
-                        .HasForeignKey("EventDTOId");
-
                     b.HasOne("ThAmCo.Events.Data.Event", "Event")
                         .WithMany("StaffBooking")
                         .HasForeignKey("EventId")
@@ -411,13 +394,6 @@ namespace ThAmCo.Events.Migrations
             modelBuilder.Entity("ThAmCo.Events.Data.Staff", b =>
                 {
                     b.Navigation("Events");
-                });
-
-            modelBuilder.Entity("ThAmCo.Events.DTOs.EventDTO", b =>
-                {
-                    b.Navigation("Bookings");
-
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

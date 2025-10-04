@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ThAmCo.Events.Data;
+using ThAmCo.Events.DTOs;
 
 namespace ThAmCo.Events.Controllers
 {
-    public class StaffingsController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class StaffingsController : ControllerBase
     {
         private readonly EventsContext _context;
 
@@ -17,124 +15,59 @@ namespace ThAmCo.Events.Controllers
         {
             _context = context;
         }
-        // General get request to return a list of staff
-        // GET: Staffings
-        public async Task<IActionResult> Index()
-        {
-            var eventsContext = _context.Staffing
-                .Include(s => s.Event)
-                .Include(s => s.Staff);
-            return View(await eventsContext.ToListAsync());
-        }
-        //Get request for a specific staff member by id
-        // GET: Staffings/Details/5
-        public async Task<IActionResult> Details(int? id, int? id2)
-        {
-            if (id == null || id2 == null)
-            {
-                return NotFound();
-            }
 
-            var staffing = await _context.Staffing
-                .Include(s => s.Event)
-                .Include(s => s.Staff)
-                .FirstOrDefaultAsync(m => m.StaffId == id && m.EventId == id2);
-            if (staffing == null)
-            {
-                return NotFound();
-            }
-
-            return View(staffing);
-        }
-        
-        // GET: Staffings/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StaffingDTO>>> GetStaffings()
         {
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Title");
-            ViewData["StaffId"] = new SelectList(_context.Staff, "Id", "Name");
-            return View();
+            return await _context.Staffing
+                .Select(s => new StaffingDTO
+                {
+                    StaffId = s.StaffId,
+                    EventId = s.EventId
+                })
+                .ToListAsync();
         }
-        //Post request to edit a staff member
-        // POST: Staffings/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [HttpGet("{staffId}/{eventId}")]
+        public async Task<ActionResult<StaffingDTO>> GetStaffing(int staffId, int eventId)
+        {
+            var s = await _context.Staffing
+                .FirstOrDefaultAsync(x => x.StaffId == staffId && x.EventId == eventId);
+            if (s == null) return NotFound();
+
+            return new StaffingDTO
+            {
+                StaffId = s.StaffId,
+                EventId = s.EventId
+            };
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StaffId,EventId")] Staffing staffing)
+        public async Task<ActionResult<StaffingDTO>> CreateStaffing(StaffingDTO dto)
         {
-            if (ModelState.IsValid)
+            var entity = new Staffing
             {
-                _context.Add(staffing);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Id", staffing.EventId);
-            ViewData["StaffId"] = new SelectList(_context.Staff, "Id", "Name", staffing.StaffId);
-            return View(staffing);
-        }
+                StaffId = dto.StaffId,
+                EventId = dto.EventId
+            };
 
-        // GET: Staffings/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Staffing == null)
-            {
-                return NotFound();
-            }
-
-            var staffing = await _context.Staffing.FindAsync(id);
-            if (staffing == null)
-            {
-                return NotFound();
-            }
-            ViewData["EventId"] = new SelectList(_context.Events, "Id", "Text", staffing.EventId);
-            ViewData["StaffId"] = new SelectList(_context.Staff, "Id", "Name", staffing.StaffId);
-            return View(staffing);
-        }
-
-
-
-        // GET: Staffings/Delete/5
-        public async Task<IActionResult> Delete(int? id, int? id2)
-        {
-            if (id == null || _context.Staffing == null)
-            {
-                return NotFound();
-            }
-
-            var staffing = await _context.Staffing
-                .Include(s => s.Event)
-                .Include(s => s.Staff)
-                .FirstOrDefaultAsync(m => m.StaffId == id && m.EventId == id2);
-            if (staffing == null)
-            {
-                return NotFound();
-            }
-
-            return View(staffing);
-        }
-
-        // POST: Staffings/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Staffing == null)
-            {
-                return Problem("Entity set 'EventsContext.Staffing'  is null.");
-            }
-            var staffing = await _context.Staffing.FindAsync(id);
-            if (staffing != null)
-            {
-                _context.Staffing.Remove(staffing);
-            }
-            
+            _context.Staffing.Add(entity);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return CreatedAtAction(nameof(GetStaffing), new { staffId = entity.StaffId, eventId = entity.EventId }, dto);
         }
-        // Check to see if staff and event are already bound
-        private bool StaffingExists(int id, int id2)
+
+        [HttpDelete("{staffId}/{eventId}")]
+        public async Task<IActionResult> DeleteStaffing(int staffId, int eventId)
         {
-          return _context.Staffing.Any(e => e.StaffId == id && e.EventId == id2);
+            var entity = await _context.Staffing
+                .FirstOrDefaultAsync(x => x.StaffId == staffId && x.EventId == eventId);
+            if (entity == null) return NotFound();
+
+            _context.Staffing.Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

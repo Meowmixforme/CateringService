@@ -2,8 +2,7 @@
 using System.Diagnostics.Metrics;
 using System.Reflection.Emit;
 using ThAmCo.Events.DTOs;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
-using ThAmCo.Events.FoodItems;
+
 
 namespace ThAmCo.Events.Data
 {
@@ -136,6 +135,5 @@ namespace ThAmCo.Events.Data
 
         public DbSet<ThAmCo.Events.DTOs.EventDTO> EventDTO { get; set; }
 
-        public DbSet<ThAmCo.Events.FoodItems.FoodItem> FoodItem { get; set; }
     }  
 }
